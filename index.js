@@ -69,26 +69,16 @@ client.connect(err => {
         res.send(documents)
       })
   })
-///
-
 
   app.post("/TakeNewOrder", (req, res) => {
     const TakeNewOrder = req.body;
-    //console.log(order);
     OrderStore.insertOne(TakeNewOrder)
       .then(result => {
         res.send(result.insertedCount > 0)
       })
   })
 
-  app.post("/AddStatus", (req, res) => {
-    const newStatus = req.body;
-    //console.log(order);
-    OrderStore.update(newStatus)
-      .then(result => {
-        res.send(result.updatedCount > 0)
-      })
-  })
+
   
   app.get('/orderedList', (req, res) => {
     OrderStore.find({ email: req.query.email })
