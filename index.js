@@ -83,34 +83,36 @@ client.connect(err => {
   app.get('/orderedList', (req, res) => {
     OrderStore.find({ email: req.query.email })
       .toArray((err, docs) => {
-        //console.log(docs);
+      
         res.send(docs)
       })
   })
 
-    app.get('/statusList', (req, res) => {
-    OrderStatusStore.find({})
-      .toArray((err, docs) => {
-        //console.log(docs);
-        res.send(docs)
-      })
-  })
-
-  app.get('/findAdmin', (req, res) => {
-  
-    AdminInfo.find()
-      .toArray((err, documents) => {
-        res.send(documents)
+  app.post('/findAdmin', (req, res) => {
+  const email =req.body.email;
+    AdminInfo.find({email:email})
+      .toArray((err, admins) => {
+        res.send(admins.length >0)
       })
   })
   
   app.delete('/delete/:id', (req, res) => {
     Services.deleteOne({ id: req.params.id })
       .then((result) => {
+	
         res.send(result.deletedCount > 0);
       })
   })
 
+  app.patch('/update/:id',(req,res)=>{
+  OrderStore.updateOne({ id: req.params.id },{
+  $set:{status: req.body.status}
+  })
+  .then(result=>{
+ 
+	 res.send(result.modifiedCount > 0);
+  })
+  })
 
 })
 //mongodb closed
